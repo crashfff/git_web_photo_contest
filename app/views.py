@@ -4,7 +4,7 @@ from django.template import loader
 from .models import *
 
 
-menu = ['О сайте', 'Профиль пользователя', 'Список фотографий', 'Список лучших фотографий']
+menu = ['О сайте', 'Служба поддержки', 'Просто кнопка)']
 
 
 def index(request):

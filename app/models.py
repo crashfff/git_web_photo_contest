@@ -10,7 +10,7 @@ class CustomUser(User):
 class Like(models.Model):
     author = models.ForeignKey('CustomUser', on_delete=models.CASCADE)
     photo = models.ForeignKey('Photo', on_delete=models.CASCADE)
-    like_published = models.DateTimeField(auto_now_add=True)
+    like_published = models.DateTimeField(auto_now_add=True, null=True)
     is_published = models.BooleanField(default=True)
 
 
@@ -18,14 +18,16 @@ class Like(models.Model):
 class Photo(models.Model):
     description = models.CharField(max_length=255)
     author = models.ForeignKey('CustomUser', on_delete=models.CASCADE)
-    photo_published = models.DateTimeField(auto_now_add=True)
-    quantity_comments = models.IntegerField()
-    quantity_likes = models.IntegerField()
+    photo_published = models.DateTimeField(auto_now_add=True, null=True)
+    photo_change = models.DateTimeField(auto_now=True)
+    quantity_comments = models.IntegerField(default=0)
+    quantity_likes = models.IntegerField(default=0)
     is_published = models.BooleanField(default=True)
+    photo = models.ImageField(upload_to="photos/%Y/%m/%d/", null=True)
 
 class Comment(models.Model):
     author = models.ForeignKey('CustomUser', on_delete=models.CASCADE)
     photo = models.ForeignKey('Photo', on_delete=models.CASCADE)
-    comment_published = models.DateTimeField(auto_now_add=True)
+    comment_published = models.DateTimeField(auto_now_add=True, null=True)
     is_published = models.BooleanField(default=True)
 

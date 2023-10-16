@@ -5,7 +5,8 @@
 <p><h3>Список всех пользователей: </h3>
 <ul>
     {% for x in list_of_users %}
-<li>{{x}}</li>
+<li>id - {{x.id}} | username - {{x}} | firstname - {{x.firstname}}| lastname - {{x.lastname}}</li>
+
     {% endfor %}
 </ul>
 {% endblock %}
