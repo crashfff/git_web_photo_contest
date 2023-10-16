@@ -2,11 +2,12 @@
 
 {% block content %}
 <h1>{{title}}</h1>
-<p><h3>Список всех пользователей: </h3>
+<table border="1" borderclor="grey">
 <ul>
     {% for x in list_of_users %}
-<li>id - {{x.id}} | username - {{x}} | firstname - {{x.firstname}}| lastname - {{x.lastname}}</li>
+<li>id - {{x.id}} | username - {{x}} | firstname - {{x.firstname}}| lastname - {{x.lastname}} </li>
 
     {% endfor %}
 </ul>
+    </table>
 {% endblock %}
