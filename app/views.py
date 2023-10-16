@@ -50,3 +50,9 @@ def login(request):
 
 def show_photo(request, photo_id):
     return HttpResponse(f'Фотография под id = {photo_id} ')
+
+def top_photos(request):
+    return HttpResponse('Топ фотографий')
+
+def random_photo(request):
+    return HttpResponse('Случайная фотография')

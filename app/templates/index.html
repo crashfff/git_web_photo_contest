@@ -4,7 +4,9 @@
 {% block content %}
 <ul class="list-articles">
     {% for p in post %}
-        <li>{{p.id}} {{}}</li>
+        <li>{{p.}}{{p.id}}  <img src="/media/{{p.photo}}" width="200" height="200"/> {{p.description}}
+        <div class="clear"></div>
+        <p class="link-read-post"><a href=" {{ p.get_absolute_url }} ">Страница фотографии</a></p></li>
     {% endfor %}
     </ul>
 {% endblock %}

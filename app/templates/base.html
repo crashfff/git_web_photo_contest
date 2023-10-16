@@ -34,10 +34,10 @@
 					<ul id="leftchapters">
 
 						<li class="selected"><b>Навигация по сайту:</b></li>
-						<li><a href="#">Ваша страница</a></li>
-						<li><a href="#">Топ фотографий</a></li>
-						<li><a href="#">Список всех пользователей</a></li>
-						<li><a href="#">Случайная фотография</a></li>
+						<li><a href="{% url 'page_user' %}">Ваша страница</a></li>
+						<li><a href="{% url 'top_photos' %}">Топ фотографий</a></li>
+						<li><a href="{% url 'list_of_users' %}">Список всех пользователей</a></li>
+						<li><a href="{% url 'random_photo' %}">Случайная фотография</a></li>
 					</ul>
 				</td>
 <td valign="top" class="content">
