@@ -13,7 +13,8 @@ urlpatterns = [
     path('login/', views.login, name='login'),
     path('top_photos/', views.top_photos, name='top_photos'),
     path('random_photo/', views.random_photo, name='random_photo'),
-    path('show_photo/<int:photo_id>', views.show_photo, name='show_photo')
+    path('show_photo/<int:photo_id>', views.show_photo, name='show_photo'),
+    path('category/<int:cat_id>', views.show_category, name='category')
 
 ]
 

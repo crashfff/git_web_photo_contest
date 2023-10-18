@@ -12,9 +12,10 @@ menu = [{'title': 'О сайте', 'url_name': 'about'},
 
 def index(request):
         post = Photo.objects.all()
+        cats = Category.objects.all()
         return render(request,
          'index.html',
-             {'menu':menu, 'title': 'Главная страница', 'post': post})
+             {'menu':menu, 'title': 'Главная страница', 'post': post, 'cats': cats, 'cat_selected': 0})
 
 
 def page_user(request):
@@ -56,3 +57,11 @@ def top_photos(request):
 
 def random_photo(request):
     return HttpResponse('Случайная фотография')
+
+
+def show_category(request, cat_id):
+
+    post = Photo.objects.filter(cat_id=cat_id)
+    cats = Category.objects.all()
+
+    return render(request, 'index.html',{'menu':menu, 'title': 'Оторбражение по категориям', 'post': post, 'cats': cats, 'cat_selected': cat_id})

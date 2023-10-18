@@ -29,17 +29,31 @@
 {% endblock mainmenu %}
 
 <table class="table-content" border=0 cellpadding="0" cellspacing="0">
-			<tr>
-				<td valign="top" class="left-chapters">
-					<ul id="leftchapters">
+<tr>
+	<td valign="top" class="left-chapters">
+	<ul id="leftchapters">
+		<li class="selected"><b> <font color="#0059b2"> Навигация по сайту: </font></b></li>
+		<li><a href="{% url 'page_user' %}">Ваша страница</a><hr color="black" size="1px"></li>
+		<li><a href="{% url 'top_photos' %}">Топ фотографий</a><hr color="black" size="1px"></li>
+		<li><a href="{% url 'list_of_users' %}">Список всех пользователей</a><hr color="black" size="1px"></li>
+		<li><a href="{% url 'random_photo' %}">Случайная фотография</a><hr  size="1px" color="black"></li>
 
-						<li class="selected"><b>Навигация по сайту:</b></li>
-						<li><a href="{% url 'page_user' %}">Ваша страница</a></li>
-						<li><a href="{% url 'top_photos' %}">Топ фотографий</a></li>
-						<li><a href="{% url 'list_of_users' %}">Список всех пользователей</a></li>
-						<li><a href="{% url 'random_photo' %}">Случайная фотография</a></li>
-					</ul>
-				</td>
+{% if cat_selected == 0 %}
+		<li class="selected"><b><font color="#0059b2">Все категории:</font></b></li>
+{% else %}
+		<li><a href="{% url 'index' %}"><b><font color="#0059b2">Все категории:</font></b></a></li>
+{% endif %}
+
+{% for c in cats %}
+	{% if c.pk == cat_selected %}
+		<li class="selected">{{c.name}}<hr color="black" size="1px"></li>
+	{% else %}
+		<li><a href="{{ c.get_absolute_url }}">{{c.name}}<hr color="black" size="1px"></a></li>
+	{% endif %}
+{% endfor %}
+
+	</ul>
+</td>
 <td valign="top" class="content">
 	{% block breadcrumbs %}
 	{% endblock  %}
@@ -54,7 +68,7 @@
 <!-- футер-->
 <tr><td valign="top">
 	<div id="footer">
-		<p>Пока что не значю что тут писать!</p>
+		<p>this website is under development!</p>
 	</div>
 </td></tr></table>
 </body>
