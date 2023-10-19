@@ -5,7 +5,7 @@
 <table border="1" borderclor="grey">
 <ul>
     {% for x in list_of_users %}
-<li>id - {{x.id}} | username - {{x}} | firstname - {{x.firstname}}| lastname - {{x.lastname}} </li>
+        <li> {{x.id}} | <a href="{{ x.get_absolute_url }}">{{x}} </a></li>
 
     {% endfor %}
 </ul>

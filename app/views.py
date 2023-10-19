@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.template import loader
 from .models import *
@@ -12,30 +12,26 @@ menu = [{'title': 'О сайте', 'url_name': 'about'},
 
 def index(request):
         post = Photo.objects.all()
-        cats = Category.objects.all()
         return render(request,
          'index.html',
-             {'menu':menu, 'title': 'Главная страница', 'post': post, 'cats': cats, 'cat_selected': 0})
+             {'menu':menu, 'title': 'Главная страница', 'post': post, 'cat_selected': 0})
 
 
-def page_user(request):
+def page_user(request, user_id):
+    list_of_users = CustomUser.objects.all()
     context = {'menu': menu,
-               'title': 'Страница пользователя'
+                'title': 'Страница пользователя',
+                'list_of_users': list_of_users,
+                'user_id': user_id,
                }
     return render(request, 'page_user.html', context=context)
 
 
-def photo(request):
-    post = Photo.objects.all()
-    context = {'menu': menu,
-               'title': 'Страница пользователя'
-               }
-    return render(request, 'photo.html', {'menu': menu,'list_of_photos': post, 'title': 'Фото'})
 
 
 def list_of_users(request):
-    post = CustomUser.objects.all()
-    return render(request, 'list_of_users.html', {'menu': menu, 'list_of_users': post, 'title': 'Список всех пользователей'})
+    list_of_users = CustomUser.objects.all()
+    return render(request, 'list_of_users.html', {'menu': menu, 'list_of_users': list_of_users, 'title': 'Список всех пользователей'})
 
 def pub_photo(request):
     return HttpResponse('Опубликование фотографии')
@@ -50,7 +46,14 @@ def login(request):
     return HttpResponse('Авторизация')
 
 def show_photo(request, photo_id):
-    return HttpResponse(f'Фотография под id = {photo_id} ')
+    post = get_object_or_404(Photo, pk=photo_id)
+    context = {'menu': menu,
+               'title': 'Страница фотографии',
+               'post': post,
+               'cat_selected': post.cat_id,
+               }
+
+    return render(request, 'photo.html', context=context)
 
 def top_photos(request):
     return HttpResponse('Топ фотографий')

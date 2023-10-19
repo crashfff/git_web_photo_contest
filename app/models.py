@@ -6,6 +6,9 @@ class CustomUser(User):
     firstname = models.CharField(max_length=255)
     lastname = models.CharField(max_length=255)
 
+    def get_absolute_url(self):
+        return reverse('page_user', kwargs={'user_id': self.pk})
+
 
 class Like(models.Model):
     author = models.ForeignKey('CustomUser', on_delete=models.CASCADE)
@@ -25,9 +28,8 @@ class Photo(models.Model):
     photo = models.ImageField(upload_to="photos/%Y/%m/%d/", null=True)
     cat = models.ForeignKey('Category', on_delete=models.PROTECT, null=True)
 
-
     def get_absolute_url(self):
-        return reverse('show_photo', kwargs={'photo_id': self.pk})
+        return reverse('photo', kwargs={'photo_id': self.pk})
 
 
 class Comment(models.Model):

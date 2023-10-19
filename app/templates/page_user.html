@@ -7,7 +7,18 @@
     <title>{{title}}</title>
 </head>
 <body>
-    <h1>PageUser!!! </h1>
-    <p>welcome</p>
+{% block content %}
+<ul class="list-articles">
+    {% for u in list_of_users %}
+        {% if u.pk == user_id %}
+        <li><b>{{u.username}} </b></li>
+        <li><b>Id пользователя: {{user_id}}</b></li>
+        <li><b>{{u.firstname}} {{u.lastname}}</b></li>
+        <li><b>Дата первого захода: {{u.date_joined}} </b></li>
+
+        {% endif %}
+    {% endfor %}
+    </ul>
+{% endblock %}
 </body>
 </html>

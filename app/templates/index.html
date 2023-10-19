@@ -3,11 +3,17 @@
 <body>
 {% block content %}
 <ul class="list-articles">
-    {% for p in post %}
-        <li><img src="/media/{{p.photo}}" align="left" width="200" height="200"/><b> Описание: </b>{{p.description}}<br> <b> Id фотографии: </b>{{p.id}} <br> <b> Категория: </b>{{p.cat}}
-        <div class="clear"></div>
-        <p class="link-read-post"><a href=" {{ p.get_absolute_url }} ">Страница фотографии</a></p></li>
+    {% for c in cats %}
+        {% if c.pk == cat_selected %}
+            <li class="selected"><h2>{{c.name}}:</h2><hr color="black" size="1px"></li>
+    {% endif %}
     {% endfor %}
+
+{% for p in post %}
+    <li><img src="/media/{{p.photo}}" align="left" width="200" height="200"/><b> Описание: </b>{{p.description}}<br> <b> Id фотографии: </b>{{p.id}} <br> <b> Категория: </b>{{p.cat}}
+    <div class="clear"></div>
+    <p class="link-read-post"><a href=" {{ p.get_absolute_url }} ">Страница фотографии</a></p></li>
+{% endfor %}
     </ul>
 {% endblock %}
 

@@ -1,13 +1,11 @@
-<!DOCTYPE html>
 {% extends 'base.html' %}
 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{title}}</title>
-</head>
-<body>
-    <h1>Photo!!! </h1>
-    <p>welcome</p>
-</body>
-</html>
+{% block content %}
+
+<h3>Автор: {{post.author}}</h3>
+
+{% if post.photo %}
+<p><img class="img-article-left" src="{{post.photo.url}}" align="" width="1000" height="1000" /></p>
+{% endif %}
+
+{% endblock %}
