@@ -8,7 +8,8 @@
             <li class="selected"><h2>{{c.name}}:</h2><hr color="black" size="1px"></li>
     {% endif %}
     {% endfor %}
-
+    </ul>
+    <ul class="list-articles">
 {% for p in post %}
     <li><img src="/media/{{p.photo}}" align="left" width="200" height="200"/>
         <b>Название: </b>{{p.title}}<br>

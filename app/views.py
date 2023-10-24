@@ -15,17 +15,14 @@ menu = [{'title': 'Опубликовать фотографию', 'url_name': '
 
 class AppIndex(DataMixin, ListView):
     model = Photo
-    paginate_by = 2
     template_name = 'index.html'
     context_object_name = 'post'
+
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title="Главная страница")
         return dict(list(context.items()) + list(c_def.items()))
-
-
-        return context
 
     def get_queryset(self):
         return Photo.objects.filter(is_published=True)
@@ -41,17 +38,19 @@ class AppIndex(DataMixin, ListView):
 
 
 def page_user(request, user_id):
-    list_of_users = CustomUser.objects.all()
+    post = Photo.objects.all()
+    list_of_users = User.objects.all()
     context = {'menu': menu,
                'title': 'Страница пользователя',
                'list_of_users': list_of_users,
                'user_id': user_id,
+               'post': post,
                }
     return render(request, 'page_user.html', context=context)
 
 
 def list_of_users(request):
-    list_of_users = CustomUser.objects.all()
+    list_of_users = User.objects.all()
     return render(request, 'list_of_users.html',
                   {'menu': menu, 'list_of_users': list_of_users, 'title': 'Список всех пользователей'})
 

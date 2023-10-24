@@ -15,9 +15,31 @@
         <li><b>Id пользователя: {{user_id}}</b></li>
         <li><b>{{u.firstname}} {{u.lastname}}</b></li>
         <li><b>Дата первого захода: {{u.date_joined}} </b></li>
-
+    <br><br>
         {% endif %}
     {% endfor %}
+    </ul>
+
+    <ul class="list-articles">
+        <li><b>Все фотографии пользователя: </b></li>
+        <br><br>
+        {% for p in post %}
+            {% if p.author_id == user_id %}
+
+                <li><img src="/media/{{p.photo}}" align="left" width="200" height="200"/>
+                <b>Название: </b>{{p.title}}<br>
+                <b> Описание: </b>{{p.description}}<br>
+                <b> Id фотографии: </b>{{p.id}} <br>
+                <b> Категория: </b>{{p.cat}}<br>
+                <b> Дата публикации: </b>{{p.photo_published}}
+            <div class="clear"></div>
+                     </li>
+        <br><br>
+
+
+            {% endif %}
+        {% endfor %}
+
     </ul>
 {% endblock %}
 </body>
