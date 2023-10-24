@@ -18,15 +18,16 @@ class Like(models.Model):
 
 
 class Photo(models.Model):
-    description = models.CharField(max_length=255)
-    author = models.ForeignKey('CustomUser', on_delete=models.CASCADE)
+    title = models.CharField(max_length=255, null=True, verbose_name='Заголовок')
+    description = models.CharField(max_length=255, verbose_name='Описание')
+    author = models.ForeignKey('CustomUser', on_delete=models.CASCADE,  verbose_name='Автор', null=True)
     photo_published = models.DateTimeField(auto_now_add=True, null=True)
     photo_change = models.DateTimeField(auto_now=True)
     quantity_comments = models.IntegerField(default=0)
     quantity_likes = models.IntegerField(default=0)
-    is_published = models.BooleanField(default=True)
-    photo = models.ImageField(upload_to="photos/%Y/%m/%d/", null=True)
-    cat = models.ForeignKey('Category', on_delete=models.PROTECT, null=True)
+    is_published = models.BooleanField(default=True, verbose_name='Публикация')
+    photo = models.ImageField(upload_to="photos/%Y/%m/%d/", null=True, verbose_name='Фото')
+    cat = models.ForeignKey('Category', on_delete=models.PROTECT, null=True, verbose_name='Категории')
 
     def get_absolute_url(self):
         return reverse('photo', kwargs={'photo_id': self.pk})
