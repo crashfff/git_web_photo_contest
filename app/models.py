@@ -1,10 +1,10 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AbstractUser
 from django.urls import reverse
+
 # создание лайков и комментариев
-# почему в списке пользователя не работает ссылка и в чем смысл кастом юзера
-#
-class CustomUser(User):
+
+class CustomUser(AbstractUser):
     firstname = models.CharField(max_length=255)
     lastname = models.CharField(max_length=255)
 

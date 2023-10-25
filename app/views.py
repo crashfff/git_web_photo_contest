@@ -39,7 +39,7 @@ class AppIndex(DataMixin, ListView):
 
 def page_user(request, user_id):
     post = Photo.objects.all()
-    list_of_users = User.objects.all()
+    list_of_users = CustomUser.objects.all()
     context = {'menu': menu,
                'title': 'Страница пользователя',
                'list_of_users': list_of_users,
@@ -50,7 +50,7 @@ def page_user(request, user_id):
 
 
 def list_of_users(request):
-    list_of_users = User.objects.all()
+    list_of_users = CustomUser.objects.all()
     return render(request, 'list_of_users.html',
                   {'menu': menu, 'list_of_users': list_of_users, 'title': 'Список всех пользователей'})
 
@@ -138,6 +138,5 @@ class LoginUser(DataMixin, LoginView):
 
 def logout_user(request):
     logout(request)
-
 
     return redirect('logout')
