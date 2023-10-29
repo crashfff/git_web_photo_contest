@@ -7,7 +7,6 @@ from website_photo_contest import settings
 urlpatterns = [
     path('app/', include('app.urls')),
     path('admin/', admin.site.urls),
-
 ]
 
 if settings.DEBUG:

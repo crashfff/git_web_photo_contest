@@ -1,4 +1,5 @@
 from django.contrib.auth import logout, login
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.views import LoginView
 from django.shortcuts import render, get_object_or_404, redirect
@@ -9,15 +10,20 @@ from django.views.generic import ListView, CreateView
 from .utils import *
 from .form import *
 from .models import *
+from django.contrib.auth.mixins import LoginRequiredMixin
+import random
+
+
+
 
 menu = [{'title': 'Опубликовать фотографию', 'url_name': 'pub_photo'},]
 
 
-class AppIndex(DataMixin, ListView):
+class AppIndex(DataMixin, ListView, LoginRequiredMixin):
     model = Photo
     template_name = 'index.html'
     context_object_name = 'post'
-
+    login_url = reverse_lazy('login')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -55,13 +61,32 @@ def list_of_users(request):
                   {'menu': menu, 'list_of_users': list_of_users, 'title': 'Список всех пользователей'})
 
 
-def pub_photo(request):
-    form = AddPostForm(request.POST, request.FILES)
-    if form.is_valid():
-        form.save()
-        return redirect('index')
-    else:
-        return render(request, 'pub_photo.html', context={'form': form, 'menu': menu, 'title': 'Добавление фотографии'})
+class Pub_Photo(LoginRequiredMixin, CreateView, AddPostForm):
+    form_class = AddPostForm
+    login_url = reverse_lazy('login')
+    template_name = 'pub_photo.html'
+    model = Photo
+    success_url = reverse_lazy('pub_photo')
+
+    def get_context_data(self, **kwargs):
+        kwargs['form'] = AddPostForm
+        kwargs['menu'] = menu
+        return super().get_context_data(**kwargs)
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.author = self.request.user
+        self.object.save()
+        return super().form_valid(form)
+#
+# def pub_photo(request):
+#     form = AddPostForm(request.POST, request.FILES)
+#     if form.is_valid():
+#         form = form.save(commit=False)
+#         form.save()
+#         return redirect('index')
+#     else:
+#         return render(request, 'pub_photo.html', context={'form': form, 'menu': menu, 'title': 'Добавление фотографии'})
 
 
 def about(request):
@@ -92,13 +117,16 @@ def top_photos(request):
 
 
 def random_photo(request):
-    return HttpResponse('Случайная фотография')
+    num = len(Photo.objects.all())
+    # мб сдеать список из всех айди опубликованных фотографий и брать рандомно из этого списка
+    random_number = random.randint(12, 15)
+    return render(request, 'random.html', {'random_number': str(random_number), 'post': Photo.objects.all()})
 
 
 
 def show_category(request, cat_id):
 
-    post = Photo.objects.filter(cat_id=cat_id)
+    post = Photo.objects.filter(cat_id=cat_id, is_published=True)
     cats = Category.objects.all()
 
     return render(request, 'index.html',{'menu':menu, 'title': 'Оторбражение по категориям', 'post': post, 'cats': cats, 'cat_selected': cat_id})
@@ -139,4 +167,4 @@ class LoginUser(DataMixin, LoginView):
 def logout_user(request):
     logout(request)
 
-    return redirect('logout')
+    return redirect('index')

@@ -131,4 +131,3 @@ MEDIA_URL = '/media/'
 
 AUTH_USER_MODEL = 'app.CustomUser'
 
-LOGOUT_REDIRECT_URL = 'index'

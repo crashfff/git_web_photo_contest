@@ -11,10 +11,12 @@
 <ul class="list-articles">
     {% for u in list_of_users %}
         {% if u.pk == user_id %}
-        <li><b>{{u.username}} </b></li>
+        <li><b>Ник:{{u.username}} </b></li>
         <li><b>Id пользователя: {{user_id}}</b></li>
-        <li><b>{{u.firstname}} {{u.lastname}}</b></li>
+        <li><b>{{u.first_name}} {{u.last_name}}</b></li>
         <li><b>Дата первого захода: {{u.date_joined}} </b></li>
+        <li><b>Дата последнего входа на сайт: {{u.last_login}}</b></li>
+
     <br><br>
         {% endif %}
     {% endfor %}

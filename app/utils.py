@@ -16,6 +16,7 @@ class DataMixin:
         user_menu = menu.copy()
 
 
+
         context['menu'] = user_menu
 
         context['cats'] = cats

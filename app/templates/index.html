@@ -2,6 +2,7 @@
 
 <body>
 {% block content %}
+
 <ul class="list-articles">
     {% for c in cats %}
         {% if c.pk == cat_selected %}
@@ -11,12 +12,14 @@
     </ul>
     <ul class="list-articles">
 {% for p in post %}
-    <li><img src="/media/{{p.photo}}" align="left" width="200" height="200"/>
+    <li><img src="/media/{{p.photo}}" align="left" width="300" height="300"/>
         <b>Название: </b>{{p.title}}<br>
         <b> Описание: </b>{{p.description}}<br>
         <b> Id фотографии: </b>{{p.id}} <br>
         <b> Категория: </b>{{p.cat}}<br>
-        <b> Дата публикации: </b>{{p.photo_published}}
+        <b> Дата публикации: </b>{{p.photo_published}}<br>
+        <b> Автор публикации: </b>{{p.author}}
+
 
 
     <div class="clear"></div>

@@ -12,4 +12,5 @@ def get_categories():
 @register.inclusion_tag('list_categories.html')
 def show_categories():
     cats = Category.objects.all()
-    return {'cats': cats}
+    list_of_users = CustomUser.objects.all()
+    return {'cats': cats, 'list_of_users': list_of_users}

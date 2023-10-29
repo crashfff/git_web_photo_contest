@@ -30,7 +30,43 @@
 		</div>
 {% endblock mainmenu %}
 
-{% show_categories %}
+<!-- начало левого меню -->
+
+<table class="table-content" border=0 cellpadding="0" cellspacing="0">
+<tr>
+	<td valign="top" class="left-chapters">
+	<ul id="leftchapters">
+		<li class="selected"><b> <font color="#0059b2"> Навигация по сайту: </font></b></li>
+
+
+		   {% if request.user.is_authenticated %}
+				<li><a href="{% url 'page_user' user.pk %}">Ваша страница</a><hr color="black" size="1px"></li>
+			{% else %}
+				<li><a href="{% url 'login' %}">Ваша страница</a><hr color="black" size="1px"></li>
+			{% endif %}
+
+		<li><a href="{% url 'top_photos' %}">Топ фотографий</a><hr color="black" size="1px"></li>
+		<li><a href="{% url 'list_of_users' %}">Список всех пользователей</a><hr color="black" size="1px"></li>
+		<li><a href="{% url 'random_photo' %}">Случайная фотография</a><hr  size="1px" color="black"></li>
+
+{% if cat_selected == 0 %}
+		<li class="selected"><b><font color="#0059b2">Все категории:</font></b></li>
+{% else %}
+		<li><a href="{% url 'index' %}"><b><font color="#0059b2">Все категории:</font></b></a></li>
+{% endif %}
+
+{% for c in cats %}
+	{% if c.pk == cat_selected %}
+		<li class="selected">{{c.name}}<hr color="black" size="1px"></li>
+	{% else %}
+		<li><a href="{{ c.get_absolute_url }}">{{c.name}}<hr color="black" size="1px"></a></li>
+	{% endif %}
+{% endfor %}
+
+	</ul></td>
+
+	<!-- конец левого меню -->
+
 
 <td valign="top" class="content">
 	{% block breadcrumbs %}
@@ -42,6 +78,8 @@
 {% if page_obj.has_other_pages %}
 <nav class="list-pages">
     <ul>
+
+
 {% if page_obj.has_previous %}
 <li class="page-num">
 	<a href="?page={{ page_obj.previous_page_number }}">&lt;</a>
