@@ -1,5 +1,7 @@
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
-from django.contrib.auth.models import User, AbstractUser
+from django.contrib.auth.models import AbstractUser
 from django.urls import reverse
 from django.dispatch import receiver
 from django.db.models.signals import post_save
@@ -22,6 +24,10 @@ class Like(models.Model):
     like_published = models.DateTimeField(auto_now_add=True)
     is_published = models.BooleanField(default=True)
 
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
+
     class Meta:
         db_table = 'Like_app_db'
 
@@ -37,18 +43,16 @@ class Photo(models.Model):
     is_published = models.BooleanField(default=True, verbose_name='Публикация')
     photo = models.ImageField(upload_to="photos/%Y/%m/%d/", verbose_name='Фото')
     cat = models.ForeignKey('Category', on_delete=models.PROTECT, verbose_name='Категории')
-
+    likes = GenericRelation(Like)
     class Meta:
         db_table = 'Photo_app_db'
-
-
 
     def get_absolute_url(self):
         return reverse('photo', kwargs={'photo_id': self.pk})
 
-
-
-
+    @property
+    def total_likes(self):
+        return self.likes.count()
 
 class Comment(models.Model):
     author = models.ForeignKey('CustomUser', on_delete=models.CASCADE)
