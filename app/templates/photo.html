@@ -3,9 +3,13 @@
 {% block content %}
 
 <h3>Автор: {{post.author}}</h3>
+<h3>ID: {{post.id}}</h3>
+<h3>Категория: {{post.cat}}</h3>
+
+
 
 {% if post.photo %}
-<p><img class="img-article-left" src="{{post.photo.url}}" align="" width="1000" height="1000" /></p>
+<p><img src="{{post.photo.url}}" align="" width="1500" height="1500" /></p>
 {% endif %}
 
 {% endblock %}

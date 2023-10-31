@@ -1,5 +1,6 @@
 from django import template
 from app.models import *
+import random
 
 register = template.Library()
 
@@ -7,6 +8,12 @@ register = template.Library()
 @register.simple_tag(name='getcats')
 def get_categories():
     return Category.objects.all()
+
+
+@register.simple_tag(name='random_number')
+def get_random_number():
+    post_list = Photo.objects.filter(is_published=True).values_list('id')
+    return str(random.choice(post_list)[0])
 
 
 @register.inclusion_tag('list_categories.html')

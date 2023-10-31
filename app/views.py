@@ -28,6 +28,8 @@ class AppIndex(DataMixin, ListView, LoginRequiredMixin):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title="Главная страница")
+        kwargs['form'] = AddPostForm
+
         return dict(list(context.items()) + list(c_def.items()))
 
     def get_queryset(self):
@@ -102,6 +104,7 @@ def contact(request):
 
 
 def show_photo(request, photo_id):
+
     post = get_object_or_404(Photo, pk=photo_id)
     context = {'menu': menu,
                'title': 'Страница фотографии',
@@ -116,11 +119,16 @@ def top_photos(request):
     return HttpResponse('Топ фотографий')
 
 
-def random_photo(request):
-    num = len(Photo.objects.all())
-    # мб сдеать список из всех айди опубликованных фотографий и брать рандомно из этого списка
-    random_number = random.randint(12, 15)
-    return render(request, 'random.html', {'random_number': str(random_number), 'post': Photo.objects.all()})
+# def random_photo(request):
+#     post = Photo.objects.filter(is_published=True).values_list('id')
+#     random_id = post[random.randint(0, len(post))][0]
+#     # мб сдеать список из всех айди опубликованных фотографий и брать рандомно из этого списка
+#     context = {'menu': menu,
+#                'title': 'Страница фотографии',
+#                'post': post,
+#                'random_number': str(random_id),
+#                }
+#     return render(request, 'random.html', context)
 
 
 

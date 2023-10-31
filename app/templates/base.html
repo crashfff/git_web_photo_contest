@@ -38,6 +38,7 @@
 	<ul id="leftchapters">
 		<li class="selected"><b> <font color="#0059b2"> Навигация по сайту: </font></b></li>
 
+{% random_number as rnum%}
 
 		   {% if request.user.is_authenticated %}
 				<li><a href="{% url 'page_user' user.pk %}">Ваша страница</a><hr color="black" size="1px"></li>
@@ -47,7 +48,7 @@
 
 		<li><a href="{% url 'top_photos' %}">Топ фотографий</a><hr color="black" size="1px"></li>
 		<li><a href="{% url 'list_of_users' %}">Список всех пользователей</a><hr color="black" size="1px"></li>
-		<li><a href="{% url 'random_photo' %}">Случайная фотография</a><hr  size="1px" color="black"></li>
+		<li><a href="{% url 'photo' rnum %}">Random photo</a><hr color="black" size="1px"></li>
 
 {% if cat_selected == 0 %}
 		<li class="selected"><b><font color="#0059b2">Все категории:</font></b></li>
