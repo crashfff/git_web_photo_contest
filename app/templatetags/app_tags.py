@@ -12,6 +12,9 @@ def get_categories():
 
 @register.simple_tag(name='random_number')
 def get_random_number():
+    #доделать шаблон, если в бд нет постов
+    if len(Photo.objects.all()) == 0:
+        return ''
     post_list = Photo.objects.filter(is_published=True).values_list('id')
     return str(random.choice(post_list)[0])
 

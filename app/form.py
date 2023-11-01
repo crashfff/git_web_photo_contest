@@ -5,6 +5,7 @@ from .models import *
 
 
 class AddPostForm(forms.ModelForm):
+    #ошибка если название файла больше 100 символов
     def __init__(self, *arg, **kwargs):
         super().__init__(*arg, **kwargs)
         self.fields['cat'].empty_label = "Категория не выбрана"
