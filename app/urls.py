@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 
 
+
 urlpatterns = [
     path('', views.AppIndex.as_view(), name='index'),
     path('page_user/<int:user_id>', views.page_user, name='page_user'),
@@ -16,7 +17,6 @@ urlpatterns = [
     # path('random_photo/', views.random_photo, name='random_photo'),
     path('photo/<int:photo_id>', views.show_photo, name='photo'),
     path('category/<int:cat_id>', views.show_category, name='category'),
-
 
 ]
 

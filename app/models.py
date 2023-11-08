@@ -35,7 +35,7 @@ class Like(models.Model):
 class Photo(models.Model):
     title = models.CharField(max_length=255, verbose_name='Заголовок')
     description = models.CharField(max_length=255, verbose_name='Описание')
-    author = models.ForeignKey('CustomUser', on_delete=models.CASCADE, verbose_name='Автор')
+    author = models.ForeignKey('CustomUser', related_name='post', on_delete=models.CASCADE, verbose_name='Автор')
     photo_published = models.DateTimeField(auto_now_add=True)
     photo_change = models.DateTimeField(auto_now=True)
     quantity_comments = models.IntegerField(default=0)
@@ -44,15 +44,13 @@ class Photo(models.Model):
     photo = models.ImageField(upload_to="photos/%Y/%m/%d/", verbose_name='Фото')
     cat = models.ForeignKey('Category', on_delete=models.PROTECT, verbose_name='Категории')
     likes = GenericRelation(Like)
+
     class Meta:
         db_table = 'Photo_app_db'
 
     def get_absolute_url(self):
         return reverse('photo', kwargs={'photo_id': self.pk})
 
-    @property
-    def total_likes(self):
-        return self.likes.count()
 
 class Comment(models.Model):
     author = models.ForeignKey('CustomUser', on_delete=models.CASCADE)
