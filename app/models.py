@@ -27,15 +27,17 @@ class Like(models.Model):
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
-
     class Meta:
         db_table = 'Like_app_db'
+
+    def __str__(self):
+        return f'Id {self.id}'
 
 
 class Photo(models.Model):
     title = models.CharField(max_length=255, verbose_name='Заголовок')
     description = models.CharField(max_length=255, verbose_name='Описание')
-    author = models.ForeignKey('CustomUser', related_name='post', on_delete=models.CASCADE, verbose_name='Автор')
+    author = models.ForeignKey('CustomUser', on_delete=models.CASCADE, verbose_name='Автор')
     photo_published = models.DateTimeField(auto_now_add=True)
     photo_change = models.DateTimeField(auto_now=True)
     quantity_comments = models.IntegerField(default=0)
@@ -43,7 +45,8 @@ class Photo(models.Model):
     is_published = models.BooleanField(default=True, verbose_name='Публикация')
     photo = models.ImageField(upload_to="photos/%Y/%m/%d/", verbose_name='Фото')
     cat = models.ForeignKey('Category', on_delete=models.PROTECT, verbose_name='Категории')
-    likes = GenericRelation(Like)
+
+    user_which_like = models.ManyToManyField('CustomUser', through='Like', related_name='photo_like')
 
     class Meta:
         db_table = 'Photo_app_db'
@@ -53,8 +56,9 @@ class Photo(models.Model):
 
 
 class Comment(models.Model):
-    author = models.ForeignKey('CustomUser', on_delete=models.CASCADE)
-    photo = models.ForeignKey('Photo', on_delete=models.CASCADE)
+    author = models.ForeignKey('CustomUser', related_name='comments', on_delete=models.CASCADE)
+    photo = models.ForeignKey('Photo', related_name='comments', on_delete=models.CASCADE)
+    comment_text = models.CharField(max_length=255, null=True)
     comment_published = models.DateTimeField(auto_now_add=True)
     is_published = models.BooleanField(default=True)
 

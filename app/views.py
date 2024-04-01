@@ -9,12 +9,18 @@ from django.template import loader
 from django.urls import reverse_lazy
 from django.views import generic
 from django.views.generic import ListView, CreateView
-from rest_framework import generics, permissions
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import generics, permissions, status, viewsets
+from rest_framework.generics import CreateAPIView, DestroyAPIView
+from rest_framework.mixins import UpdateModelMixin
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.viewsets import GenericViewSet
 
 from app import serializers
 from .permissions import IsOwnerOrReadOnly
+from .serializers import LikeSerializer
 from .utils import *
 from .form import *
 from .models import *
@@ -49,13 +55,16 @@ class CustomUserDetail(generics.RetrieveAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = serializers.CustomUserSerializer
 
+
 class PhotoList(generics.ListCreateAPIView):
     queryset = Photo.objects.all()
     serializer_class = serializers.PhotoSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
+    @swagger_auto_schema(operation_description="perform_create description override", responses={404: 'slug not found'})
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
+
 
 class PhotoDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Photo.objects.all()
@@ -63,7 +72,80 @@ class PhotoDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly]
 
+    def get(self, request):
+        p = Photo.objects.all()
+        return Response({'posts': serializers.PhotoSerializer(p, many=True).data})
 
+    def post(self, request):
+        serializer = serializers.PhotoSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response({'post': serializer.data})
+
+    def put(self, request, *args, **kwargs):
+        pk = kwargs.get('pk', None)
+        if not pk:
+            Response({'error': 'Method PUT not allowed'})
+
+        try:
+            instance = Photo.objects.get(pk=pk)
+        except:
+            return Response({'error': 'Object does not exists'})
+
+        serializer = serializers.PhotoSerializer(data=request.data, instance=instance)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({'post': serializer.data})
+
+    def delete(self, request, *args, **kwargs):
+        pk = kwargs.get('pk', None)
+        if not pk:
+            return Response({'error': 'Method DELETE not allowed'})
+
+        try:
+            del_post = Photo.objects.get(pk=pk)
+        except:
+            return Response({'error': 'Object does not exists'})
+
+        del_post.delete()
+
+        return Response({'error': 'delete post ' + str(pk)})
+
+
+class CommentList(generics.ListCreateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = serializers.CommentSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
+
+
+class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = serializers.CommentSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly,
+                          IsOwnerOrReadOnly]
+
+
+class LikeViewSet(CreateAPIView):
+
+    queryset = Like.objects.all()
+    serializer_class = serializers.LikeSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def post(self, request, *args, **kwargs):
+        photo = Photo.objects.get(id=kwargs['id'])
+        user = request.user
+        like = Like.objects.create(photo=photo, user=user)
+
+        return Response(LikeSerializer(like).data, status=status.HTTP_200_OK)
+
+    def get(self, request, *args, **kwargs):
+        l = Like.objects.all()
+
+        return Response({'likes': serializers.LikeSerializer(l, many=True).data})
 
 # class AppIndexAPIView(APIView):
 #     def get(self, request):

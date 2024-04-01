@@ -3,6 +3,53 @@
 <body>
 {% block content %}
 
+
+<script>
+    // Функция для отправки POST запроса на добавление лайка
+function addLike(contentId, userId) {
+    fetch('/api/v1/photo/1/like', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            content_id: contentId,
+            user_id: userId
+        })
+    }).then(response => {
+        // Обработка успешного ответа
+    }).catch(error => {
+        // Обработка ошибки
+        console.error('Ошибка:', error);
+    });
+}
+
+// Функция для отправки DELETE запроса на удаление лайка
+function removeLike(likeId) {
+    fetch(`/api/likes/${likeId}/`, {
+        method: 'DELETE',
+    }).then(response => {
+        // Обработка успешного ответа
+    }).catch(error => {
+        // Обработка ошибки
+        console.error('Ошибка:', error);
+    });
+}
+
+// Функция для получения списка лайков для определенного контента
+function getLikesForContent(contentId) {
+    fetch(`/api/likes/?content_id=${contentId}`)
+    .then(response => response.json())
+    .then(data => {
+        // Обработка полученных данных
+    })
+    .catch(error => {
+        // Обработка ошибки
+        console.error('Ошибка:', error);
+    });
+}
+</script>
+
 <ul class="list-articles">
     {% for c in cats %}
         {% if c.pk == cat_selected %}
@@ -19,8 +66,9 @@
         <b> Категория: </b>{{p.cat}}<br>
         <b> Дата публикации: </b>{{p.photo_published}}<br>
         <b> Автор публикации: </b>{{p.author}}
-
-
+        {% if user.is_authenticated %}
+            <button onclick="addLike({{p.id}}, {{user.id}})">like</button><b>  {{p.quantity_likes}}</b>
+        {% endif %}
 
     <div class="clear"></div>
     <p class="link-read-post"><a href=" {{ p.get_absolute_url }} ">Страница фотографии</a></p></li>
@@ -28,5 +76,7 @@
     </ul>
 {% endblock %}
 
+
 </body>
 </html>
+
